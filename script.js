@@ -1,17 +1,24 @@
-// Leaflet map для Алматы
-var map = L.map('map').setView([43.238949, 76.889709], 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e){
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+      });
+  });
+});
 
-// Пример маркеров пунктов переработки
-var recyclePoints = [
-  {lat:43.240, lng:76.89, name:"Пункт переработки 1"},
-  {lat:43.245, lng:76.88, name:"Пункт переработки 2"},
-  {lat:43.235, lng:76.895, name:"Пункт переработки 3"}
-];
+// Simple fade-in on scroll
+const faders = document.querySelectorAll('.feature-card, .team-member, #how-it-works');
+const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll){
+  entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      entry.target.classList.add('appear');
+      appearOnScroll.unobserve(entry.target);
+  });
+}, appearOptions);
 
-recyclePoints.forEach(function(p){
-  L.marker([p.lat, p.lng]).addTo(map)
-    .bindPopup(p.name);
+faders.forEach(fader => {
+  appearOnScroll.observe(fader);
 });
