@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoHelper Bot — играем за чистый Казахстан!</title>
+<meta name="description" content="Участвуй в эко-челленджах, следи за чистотой воздуха и сортируй мусор вместе с EcoHelper Bot!">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="style.css">
+
+<!-- OG meta -->
+<meta property="og:title" content="EcoHelper Bot — играем за чистый Казахстан!">
+<meta property="og:description" content="Участвуй в эко-челленджах, следи за чистотой воздуха и сортируй мусор вместе с EcoHelper Bot!">
+<meta property="og:image" content="images/og-image.jpg">
+<meta property="og:url" content="https://ecohelper.kbtu.us">
+
+<!-- Leaflet map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+
+<header>
+  <h1>🌿 EcoHelper Bot</h1>
+  <p>Играем за чистый Казахстан! Эко-челленджи и карта переработки прямо в Telegram.</p>
+</header>
+
+<section>
+  <h2>Что тебя ждёт:</h2>
+  <ul>
+    <li>📍 Интерактивная карта ближайших пунктов переработки</li>
+    <li>🏆 Ежедневные эко-челленджи</li>
+    <li>💡 Советы по сортировке и защите природы</li>
+    <li>📰 Новости экологических проектов и мероприятий</li>
+  </ul>
+
+  <h2>Попробуй EcoHelper Bot первым!</h2>
+  <form action="https://bit.ly/ecokz-custdev" method="get" target="_blank">
+    <input type="text" name="name" placeholder="Ваше имя" required>
+    <input type="email" name="email" placeholder="Ваш Email" required>
+    <input type="tel" name="phone" placeholder="Телефон" required>
+    <button type="submit">Хочу играть и помогать экологии!</button>
+  </form>
+  <p>⚡️ Бот запускается в ноябре 2025 года! Первые пользователи получают эксклюзивные эко-фишки.</p>
+</section>
+
+<section>
+  <h2>Интерактивная карта пунктов переработки</h2>
+  <div class="map-container" id="map"></div>
+</section>
+
+<section>
+  <h2>Наша команда</h2>
+  <div class="team">
+    <div class="member">
+      <img src="images/team1.jpg" alt="Дәурен Ергалиев">
+      <p>Дәурен Ергалиев<br>Team Lead / Data Engineer</p>
+    </div>
+    <div class="member">
+      <img src="images/team2.jpg" alt="Еркіман Лазер">
+      <p>Еркіман Лазер<br>Data Engineer / Data Preparation</p>
+    </div>
+    <div class="member">
+      <img src="images/team3.jpg" alt="Диана Русланова">
+      <p>Диана Русланова<br>Evaluation Specialist</p>
+    </div>
+    <div class="member">
+      <img src="images/team4.jpg" alt="Акжол Иссалиев">
+      <p>Акжол Иссалиев<br>Data Engineer</p>
+    </div>
+    <div class="member">
+      <img src="images/team5.jpg" alt="Милана Алигазиева">
+      <p>Милана Алигазиева<br>Evaluation Specialist</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>📍 Казахстан, г. Алматы, КБТУ</p>
+  <p>📞 <a href="tel:+77071234567">+7 707 123 45 67</a> | ✉️ <a href="mailto:ecohelper.team@gmail.com">ecohelper.team@gmail.com</a></p>
+  <div class="social">
+    <a href="#">Telegram</a> | <a href="#">WhatsApp</a> | <a href="#">Facebook</a>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
