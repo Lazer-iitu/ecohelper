@@ -1,117 +1,1240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoHelper Bot — your eco assistant</title>
-    <meta name="description" content="EcoHelper Bot — Telegram bot that helps you sort waste, find recycling points, and participate in eco challenges.">
-    <meta property="og:title" content="EcoHelper Bot — your eco assistant">
-    <meta property="og:description" content="Helps sort waste, find recycling points, and join eco challenges.">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-    <!-- Yandex Metrika -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoHelper Bot — your eco assistant / EcoHelper Bot — ваш эко‑ассистент</title>
+  <meta name="description" content="EcoHelper Bot — Telegram bot that helps you sort waste, find recycling points, and participate in eco challenges.">
 
-        ym(XXXXXXX, "init", {
-             clickmap:true,
-             trackLinks:true,
-             accurateTrackBounce:true
-        });
-    </script>
-    <!-- /Yandex Metrika -->
+  <!-- Styles (template + small overrides) -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/magnific-popup.css" rel="stylesheet">
+  <link href="css/templatemo-first-portfolio-style.css" rel="stylesheet">
+
+  <style>
+    /* Small overrides for our chat-mockup and language switch */
+    .lang-switch { gap: .5rem; }
+    .chat-mockup { background: #f6fbf5; border-radius: 18px; padding: 18px; box-shadow: 0 8px 24px rgba(30,50,30,0.08); }
+    .chat-bubble { background: white; padding: 10px 14px; border-radius: 14px; margin-bottom: 10px; max-width: 78%; }
+    .chat-bubble.bot { background: #e6f7ea; }
+    .hero-cta .btn { margin-right: .6rem; }
+    .tech-list li { margin-bottom: .5rem; }
+
+    /* hide-by-lang helper */
+    .lang-ru { display: none; }
+  </style>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    
+/* --- Navbar base (default: green background, white text) --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #14B789; /* green by default */
+    transition: all 0.4s ease;
+    padding: 20px 0;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Scrolled navbar (floating white card style) */
+  .navbar.scrolled {
+    background-color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 14px 0;
+    margin: 14px auto;
+    width: 94%;
+    border-radius: 14px;
+  }
+  
+  /* --- Brand text --- */
+  .navbar-brand {
+    font-weight: 800;
+    color: #ffffff !important;
+    font-size: 28px;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+  
+  /* Brand color when scrolled */
+  .navbar.scrolled .navbar-brand {
+    color: #14B789 !important;
+  }
+  
+  /* --- Nav links --- */
+  .navbar .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    padding: 10px 18px;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  
+  /* When scrolled, links become green */
+  .navbar.scrolled .nav-link {
+    color: #14B789 !important;
+  }
+  
+  /* Hover and active link states (green, not black) */
+  .navbar .nav-link.active,
+  .navbar .nav-link:hover {
+    color: #e8fff6 !important; /* light green-white for hover */
+  }
+  
+  /* Scrolled hover (darker green for contrast) */
+  .navbar.scrolled .nav-link:hover,
+  .navbar.scrolled .nav-link.active {
+    color: #0fa277 !important;
+  }
+  
+  /* --- Telegram Button --- */
+  .btn-outline-success {
+    color: #ffffff;
+    border-color: #ffffff;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 15px;
+  }
+  
+  .btn-outline-success:hover {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #14B789;
+  }
+  
+  /* Scrolled button style */
+  .navbar.scrolled .btn-outline-success {
+    border-color: #14B789;
+    color: #14B789;
+  }
+  
+  .navbar.scrolled .btn-outline-success:hover {
+    background-color: #14B789;
+    color: #fff;
+  }
+  
+  /* --- Navbar toggler (mobile) --- */
+  .navbar-toggler {
+    border: none;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  /* --- Responsive Adjustments --- */
+  @media (max-width: 991px) {
+    .navbar.scrolled {
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+  
+    .navbar {
+      background-color: #14B789 !important; /* always green on mobile */
+    }
+  
+    .navbar .nav-link {
+      font-size: 16px;
+      text-align: center;
+      padding: 12px 0;
+    }
+  
+    .navbar-brand {
+      font-size: 24px;
+    }
+  }
+  
+  
+  
+ /* --- HERO SECTION (white background, violet chat) --- */
+.hero {
+    background: #ffffff;
+    min-height: 90vh;
+    padding: 160px 0;
+    color: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Chat box */
+  .hero .chat-box {
+    background: #535DA1; /* violet background */
+    color: #fff;
+    border-radius: 20px;
+    padding: 40px 35px;
+    box-shadow: 0 15px 40px rgba(83, 93, 161, 0.3);
+    max-width: 480px;
+    margin: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hero .chat-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(83, 93, 161, 0.4);
+  }
+  
+  /* Chat messages */
+  .chat-message {
+    margin-bottom: 16px;
+    border-radius: 18px;
+    padding: 14px 18px;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  .bot-msg {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+  }
+  
+  .user-msg {
+    background: #ffffff;
+    color: #333;
+    float: right;
+  }
+  
+  /* "Open in Maps" link */
+  .chat-message a {
+    color: #ffffff;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+  }
+  .chat-message a:hover {
+    color: #e0e0ff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Avatar area */
+  .hero .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    background: #fff;
+    padding: 4px;
+  }
+  
+  /* Person image (larger and more central) */
+  .hero img.person {
+    max-width: 620px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease;
+  }
+  
+  .hero img.person:hover {
+    transform: scale(1.07);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 991px) {
+    .hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 120px 0;
+    }
+  
+    .hero img.person {
+      margin-top: 50px;
+      max-width: 420px;
+    }
+  
+    .hero .chat-box {
+      margin: 0 auto;
+    }
+  }
+  
+
+/* --- MAIN SECTION --- */
+.eco-section {
+  position: relative;
+  background: linear-gradient(180deg, #14B789 0%, #4B64A1 100%);
+  background-attachment: fixed;
+  padding: 180px 0;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Overlay for readability */
+.eco-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(83,93,161,0.65) 0%, rgba(20,183,137,0.6) 100%);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+.eco-section .container { position: relative; z-index: 2; }
+
+/* Title */
+.eco-section h2 {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  color: #ffffff;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Paragraphs */
+.eco-section p {
+  font-size: 20px;
+  color: #f1f1f1;
+  max-width: 850px;
+  margin: 0 auto 30px;
+  line-height: 1.7;
+}
+
+/* Buttons */
+.eco-section .btn {
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-size: 17px;
+  transition: all 0.3s ease;
+}
+.eco-section .btn-success {
+  background: #14B789;
+  border: 2px solid #14B789;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(20,183,137,0.4);
+}
+.eco-section .btn-success:hover {
+  background: #0fa277;
+  border-color: #0fa277;
+  transform: translateY(-2px);
+}
+.eco-section .btn-outline-light {
+  border: 2px solid #fff;
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(4px);
+}
+.eco-section .btn-outline-light:hover {
+  background: #fff;
+  color: #535DA1;
+  transform: translateY(-2px);
+}
+
+.eco-section .small {
+  color: #e1e1e1;
+  font-size: 16px;
+  margin-top: 30px;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .eco-section {
+    padding: 140px 0 120px;
+    background-attachment: scroll;
+  }
+  .eco-section h2 { font-size: 40px; }
+  .eco-section p {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+}
+
+  
+   /* --- Main Hero Info Section (Eco theme + glass buttons) --- */
+.eco-section {
+    position: relative;
+    background: url('images/plant-ecology-bg.jpg') center/cover no-repeat;
+    background-attachment: fixed;
+    padding: 200px 0 180px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  /* Gradient overlay for vivid eco look */
+  .eco-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg, rgba(83,93,161,0.75) 0%, rgba(20,183,137,0.75) 100%);
+    backdrop-filter: blur(4px);
+    z-index: 1;
+  }
+  
+  /* Ensure content above overlay */
+  .eco-section .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Title styling */
+  .eco-section h2 {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Subtitle text */
+  .eco-section p {
+    font-size: 20px;
+    color: #f3f3f3;
+    max-width: 850px;
+    margin: 0 auto 30px;
+    line-height: 1.7;
+  }
+  
+  /* Button group */
+  .eco-section .btn {
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-size: 17px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Primary button (Telegram) */
+  .eco-section .btn-success {
+    background: #14B789;
+    border: 2px solid #14B789;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(20,183,137,0.4);
+  }
+  .eco-section .btn-success:hover {
+    background: #0fa277;
+    border-color: #0fa277;
+    transform: translateY(-2px);
+  }
+  
+  /* Outline button */
+  .eco-section .btn-outline-light {
+    border: 2px solid #fff;
+    color: #fff;
+    backdrop-filter: blur(3px);
+    background: rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+  .eco-section .btn-outline-light:hover {
+    background: #fff;
+    color: #535DA1;
+    transform: translateY(-2px);
+  }
+  
+  /* Bottom text */
+  .eco-section .small {
+    color: #e1e1e1;
+    font-size: 16px;
+    margin-top: 30px;
+    opacity: 0.9;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .eco-section {
+      padding: 140px 0 120px;
+      background-attachment: scroll;
+    }
+    .eco-section h2 {
+      font-size: 40px;
+    }
+    .eco-section p {
+      font-size: 18px;
+      padding: 0 20px;
+    }
+    .eco-section .btn {
+      margin-bottom: 15px;
+    }
+  }
+  
+
+ /* --- Technology Section (Purple theme, GPT-style text) --- */
+#section_tech {
+    background-color: #f7f8fc;
+    padding: 120px 0;
+    font-family: 'DM Sans', sans-serif;
+    color: #2e2e2e;
+  }
+  
+  /* Header label */
+  #section_tech .section-header {
+    background: #535da1; /* purple accent */
+    color: #fff;
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 32px;
+    box-shadow: 0 6px 20px rgba(83, 93, 161, 0.3);
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease;
+  }
+  #section_tech .section-header:hover {
+    background: #464d94;
+  }
+  
+  /* Card style */
+  #section_tech .tech-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 50px 60px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 900px;
+    margin: auto;
+    text-align: left;
+  }
+  
+  #section_tech .tech-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 38px rgba(0,0,0,0.08);
+  }
+  
+  /* Title inside card */
+  #section_tech h3 {
+    color: #535da1;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+  }
+  
+  /* Text & list style (GPT-like readability) */
+  #section_tech p,
+  #section_tech li {
+    color: #3c3c3c;
+    font-size: 17px;
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+  }
+  
+  #section_tech ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 25px;
+  }
+  
+  #section_tech ul li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 10px;
+  }
+  
+  #section_tech ul li::before {
+    content: "•";
+    color: #535da1;
+    position: absolute;
+    left: 0;
+    font-size: 22px;
+    line-height: 1;
+  }
+  
+  /* Example text */
+  #section_tech .fst-italic {
+    font-style: italic;
+    color: #666;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 992px) {
+    #section_tech {
+      padding: 80px 0;
+    }
+    #section_tech .tech-card {
+      padding: 40px 25px;
+    }
+    #section_tech .section-header {
+      font-size: 26px;
+      padding: 12px 24px;
+    }
+  }
+  
+
+
+/* --- Features Section (Purple theme + eco background) --- */
+#section_features {
+    position: relative;
+    padding: 120px 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(245,245,255,0.95) 100%);
+    overflow: hidden;
+    color: #2b2b2b;
+  }
+  
+  /* Background eco image */
+  #section_features::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('images/bg.jpg') center/cover no-repeat;
+    filter: blur(3px) brightness(1.05);
+    opacity: 0.4; /* visible but text still clear */
+    z-index: 0;
+  }
+  
+  /* Bring content above background */
+  #section_features .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Section heading */
+  #section_features h2 {
+    font-size: 44px;
+    font-weight: 800;
+    color: #535DA1;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  
+  #section_features p.small {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 60px;
+  }
+  
+  /* Feature cards */
+  .feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px 30px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    backdrop-filter: blur(6px);
+  }
+  
+  /* Purple accent bar */
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: #535DA1;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    transition: width 0.4s ease;
+  }
+  
+  /* Hover effects */
+  .feature-card:hover::before {
+    width: 100%;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 14px 32px rgba(83, 93, 161, 0.25);
+  }
+  
+  /* Text styles */
+  .feature-card h4 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+  }
+  
+  .feature-card:hover h4 {
+    color: #535DA1;
+  }
+  
+  .feature-card p {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.7;
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    #section_features {
+      padding: 80px 0;
+    }
+  
+    .feature-card {
+      padding: 30px 20px;
+    }
+  
+    #section_features h2 {
+      font-size: 36px;
+    }
+  }
+  
+  
+   /* --- Team Section Updated --- */
+#section_team {
+    background-color: #f8f9fa;
+    padding: 120px 0;
+    text-align: center;
+    }
+    
+    
+    #section_team h2 {
+    font-size: 44px;
+    font-weight: 700;
+    color: #14B789;
+    margin-bottom: 70px;
+    }
+    
+    
+    .team-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 60px;
+    }
+    
+    
+    .team-member {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 50px 40px 40px 40px;
+    width: 320px;
+    transition: all 0.4s ease;
+    text-align: center;
+    }
+    
+    
+    .team-member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+    
+    
+    .team-member img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 25px;
+    border: 5px solid #14B789;
+    transition: transform 0.5s ease;
+    }
+    
+    
+    .team-member:hover img {
+    transform: scale(1.08);
+    }
+    
+    
+    .team-member h5 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+    }
+    
+    
+    .team-member:hover h5 {
+    color: #14B789;
+    }
+    
+    
+    .team-member p {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+    }
+    
+    
+    @media (max-width: 768px) {
+    .team-wrapper {
+    flex-direction: column;
+    gap: 40px;
+    }
+    .team-member {
+    width: 90%;
+    }
+    }
+
+    /* --- Contact Section --- */
+    #section_contact {
+        background-color: #111;
+        color: #f8f9fa;
+        padding: 100px 0 60px;
+        position: relative;
+      }
+  
+      #section_contact h3 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #fff;
+        position: relative;
+      }
+  
+      #section_contact h3::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: #14B789;
+        border-radius: 2px;
+      }
+  
+      #section_contact p {
+        font-size: 17px;
+        margin-bottom: 10px;
+      }
+  
+      #section_contact a {
+        color: #f8f9fa;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+  
+      #section_contact a:hover {
+        color: #14B789;
+        text-decoration: underline;
+      }
+  
+      .btn-contact {
+        border: 2px solid #14B789;
+        color: #14B789;
+        background: transparent;
+        border-radius: 50px;
+        padding: 10px 26px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+  
+      .btn-contact:hover {
+        background-color: #14B789;
+        color: #fff;
+      }
+  
+      .footer-copy {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        margin-top: 60px;
+        padding-top: 30px;
+        color: #aaa;
+        font-size: 14px;
+      }
+  
+      .footer-copy span {
+        color: #ccc;
+      }
+  
+      .footer-copy a {
+        color: #14B789;
+        text-decoration: none;
+      }
+  
+      .footer-copy a:hover {
+        text-decoration: underline;
+      }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <header id="hero">
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How it works</a>
-            <a href="#team">Team</a>
-            <a href="#contact">Contact</a>
-        </nav>
-        <div class="hero-content">
-            <img src="images/logo.png" alt="EcoHelper Bot Logo" class="logo">
-            <h1>EcoHelper Bot — your eco assistant</h1>
-            <p>Find recycling points, join eco challenges, and develop waste sorting habits</p>
-            <a href="https://bit.ly/your-bitly-ios" class="btn-cta">INSTALL iOS</a>
-            <a href="https://bit.ly/your-bitly-android" class="btn-cta">INSTALL Android</a>
-        </div>
-    </header>
 
-    <!-- Features Section -->
-    <section id="features">
-        <h2>Bot Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <img src="images/feature1.png" alt="Map">
-                <h3>Recycling Points Map</h3>
-                <p>Find the nearest recycling points for waste and batteries with map and Google Maps link</p>
+    <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#section_hero">EcoHelper Bot</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-lg-4">
+            <li class="nav-item"><a class="nav-link click-scroll active" href="#section_hero">Home</a></li>
+            <li class="nav-item"><a class="nav-link click-scroll" href="#section_features">Features</a></li>
+            <li class="nav-item"><a class="nav-link click-scroll" href="#section_tech">Technology</a></li>
+            <li class="nav-item"><a class="nav-link click-scroll" href="#section_map">Recycling</a></li>
+            <li class="nav-item"><a class="nav-link click-scroll" href="#section_team">Team</a></li>
+            <li class="nav-item"><a class="nav-link click-scroll" href="#section_contact">Contact</a></li>
+          </ul>
+          
+
+        <div class="ms-auto d-flex align-items-center lang-switch">
+          <div class="me-3">
+            <a href="#" id="tg-link" class="btn btn-outline-success btn-sm">Telegram</a>
+          </div>
+
+          <div>
+            <div class="btn-group" role="group" aria-label="Language switch">
+              <button class="btn btn-sm btn-light" id="btn-en">EN</button>
+              <button class="btn btn-sm" id="btn-ru">RU</button>
             </div>
-            <div class="feature-card">
-                <img src="images/feature2.png" alt="Tips">
-                <h3>Sorting Tips</h3>
-                <p>Learn how to correctly separate waste and reduce plastic usage</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+<!-- Hero Section -->
+<section class="hero d-flex align-items-center" id="section_hero">
+    <div class="container">
+    <div class="row align-items-center">
+    <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+    <div class="chat-box">
+    <div class="d-flex align-items-center mb-3">
+    <img src="images/logo.png" alt="EcoHelper Avatar" class="avatar">
+    <div><strong>EcoHelper</strong><br><small>@EcoHelperBot</small></div>
+    </div>
+    <div class="chat-message bot-msg">Looking for where to drop used batteries?</div>
+    <div class="chat-message user-msg">Yes, near Almaty</div>
+    <div class="chat-message bot-msg">Here’s a recycling point 1.2 km from you — open map<br><a href="#" class="small text-decoration-underline">Open in Maps</a></div>
+    </div>
+    </div>
+    
+    
+    <div class="col-lg-6 col-md-12 text-center">
+    <img src="images/9433661.jpg" alt="Person with laptop" class="person img-fluid">
+    </div>
+    </div>
+    </div>
+    </section>
+    
+    
+    <!-- Info Section -->
+    <section class="eco-section text-center" id="section_info">
+    <div class="container">
+    <h2>EcoHelper Bot — your eco assistant</h2>
+    <p>Not sure where to recycle your waste? EcoHelper helps you find recycling points, learn sorting rules and join eco-challenges.</p>
+    <div class="mt-4">
+    <a href="#" class="btn btn-success">Try in Telegram</a>
+    <a href="#section_features" class="btn btn-outline-light">How it works</a>
+    </div>
+    <p class="mt-4 small">Free, community-driven and privacy friendly.</p>
+    </div>
+    </section>
+    
+
+
+    <!-- FEATURES -->
+    <section class="section-padding" id="section_features">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center mb-4">
+            <h2><span class="lang-en">Features</span><span class="lang-ru">Функции</span></h2>
+            <p class="small text-muted"><span class="lang-en">Everything a citizen needs to recycle smarter.</span><span class="lang-ru">Всё, что нужно, чтобы правильно сдавать отходы.</span></p>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>📍 <span class="lang-en">Recycling Points Map</span><span class="lang-ru">Карта пунктов приёма</span></h4>
+              <p><span class="lang-en">Find nearby recycling centers, batteries, electronics with map links (OpenStreetMap / Google Maps).</span><span class="lang-ru">Найдите пункты приёма батареек, пластика и техники с ссылками на карту.</span></p>
             </div>
-            <div class="feature-card">
-                <img src="images/feature3.png" alt="Challenges">
-                <h3>Eco Challenges</h3>
-                <p>Participate in weekly challenges and compete with friends</p>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>♻️ <span class="lang-en">Sorting Tips</span><span class="lang-ru">Советы по сортировке</span></h4>
+              <p><span class="lang-en">Short, localised tips for common materials — what can / cannot be recycled.</span><span class="lang-ru">Короткие локальные подсказки — что можно, а что нельзя сдавать.</span></p>
             </div>
-            <div class="feature-card">
-                <img src="images/feature3.png" alt="Air Quality">
-                <h3>Air Quality Alerts</h3>
-                <p>Receive notifications about air quality in your area</p>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>🏆 <span class="lang-en">Eco Challenges</span><span class="lang-ru">Эко‑челленджи</span></h4>
+              <p><span class="lang-en">Weekly tasks (e.g., week without plastic) with leaderboards to motivate users.</span><span class="lang-ru">Еженедельные задания (неделя без пластика) и таблицы лидеров для мотивации.</span></p>
             </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>⚠️ <span class="lang-en">Air Quality Alerts</span><span class="lang-ru">Оповещения о качестве воздуха</span></h4>
+              <p><span class="lang-en">Optional notifications about AQI in your city.</span><span class="lang-ru">Оповещения о качестве воздуха в вашем городе.</span></p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>📊 <span class="lang-en">Local Projects & News</span><span class="lang-ru">Местные проекты и новости</span></h4>
+              <p><span class="lang-en">Discover local eco initiatives and events in the city.</span><span class="lang-ru">Узнавайте о локальных эко‑инициативах и мероприятиях.</span></p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-card p-3 h-100">
+              <h4>🔒 <span class="lang-en">Privacy & Offline Mode</span><span class="lang-ru">Приватность и офлайн‑режим</span></h4>
+              <p><span class="lang-en">Minimal data collection; core features work offline once data cached.</span><span class="lang-ru">Минимальный сбор данных; базовые функции работают офлайн после кеша.</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+   <!-- Technology Stack Section -->
+<section id="section_tech">
+    <div class="container text-center mb-5">
+    <div class="section-header">Technology Stack</div>
+    </div>
+    <div class="container">
+    <div class="row justify-content-center">
+    <div class="col-lg-10">
+    <div class="tech-card">
+    <h3>Reliable Open-Source Technologies</h3>
+    <p>We use open, battle-tested components so the bot is reliable, scalable, and easy to extend.</p>
+    <ul>
+    <li><strong>OpenStreetMap / Nominatim</strong> — geocoding & POI search.</li>
+    <li><strong>Python + aiogram</strong> — Telegram bot framework and backend logic.</li>
+    <li><strong>Postgres / PostGIS</strong> — storing recycling points & spatial queries.</li>
+    <li><strong>Small microservice</strong> — handles Air Quality APIs & notifications.</li>
+    <li><strong>Frontend</strong> — Bootstrap-based landing + map integration.</li>
+    </ul>
+    <p class="mt-4 text-muted fst-italic">Example flow: user taps “Battery” → bot finds nearest POI → returns map link & sorting tip.</p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>
+    
+
+    <!-- Map Section -->
+<section id="section_map" class="section-padding">
+    <div class="container text-center mb-4">
+      <h2>📍 Recycling Points Map</h2>
+      <p>Find nearby eco-collection points for paper, batteries, and electronics.</p>
+    </div>
+    <div id="map" style="height: 600px; border-radius: 12px;"></div>
+  </section>
+  
+  <!-- Leaflet JS & CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script>
+    // Initialize the map
+    const map = L.map('map').setView([43.238949, 76.889709], 12); // Almaty center
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+  
+    const locations = [
+  // ♻️ PAPER RECYCLING
+  { name: "Kazakhstan Waste Recycling", type: "Paper", coords: [43.2375, 76.8848], address: "мкр. Аксай-3а, ул. Толеби (между Момышулы и Яссауи)", phone: "+7 701 721 55 72", hours: "Mon-Fri 10:00–17:30" },
+  { name: "Kagazy Recycling", type: "Paper", coords: [43.2239, 76.8685], address: "ул. Шаляпина, уг. ул. Алтынсарина", phone: "+7 771 993 86 92" },
+  { name: "KazWaste – Сары-Арка", type: "Paper", coords: [43.2421, 76.8628], address: "мкр-4, дом 22 (возле кинотеатра Сары-Арка)", phone: "+7 701 721 55 31" },
+  { name: "Стрела – Прием макулатуры", type: "Paper", coords: [43.2473, 76.9186], address: "ул. Толеби уг. ул. Байзакова", phone: "+7 701 721 55 41" },
+  { name: "Жолдасбекова/Мендикулова", type: "Paper", coords: [43.2193, 76.9369], address: "ул. Жолдасбекова уг. ул. Мендикулова", phone: "+7 701 721 55 30" },
+  { name: "Тимирязева 81", type: "Paper", coords: [43.2256, 76.9089], address: "ул. Тимирязева 81 уг. ул. Ауэзова", phone: "+7 701 721 55 73" },
+  { name: "Ворошилова 15А", type: "Paper", coords: [43.2894, 76.9122], address: "ул. Ворошилова 15 А", phone: "245-81-33" },
+  { name: "ТОO РЕИЗ", type: "Paper", coords: [43.3048, 76.9486], address: "ул. Бекмаханова 93", phone: "30-00-454" },
+  { name: "ТОO КАРИНА TRADING", type: "Paper", coords: [43.2682, 76.9194], address: "ул. Казыбаева 264 А", phone: "+7 701 557 57 64" },
+  { name: "Компания Маолин", type: "Paper", coords: [43.2199, 76.8577], address: "мкр. Мамыр, ул. Садовый бульвар 1 З", phone: "+7 777 008 83 50" },
+  { name: "Вторсырье-Маркет", type: "Paper", coords: [43.2652, 76.9225], address: "ул. Казыбаева 26", phone: "+7 701 744 26 43" },
+  { name: "ИП Михаил (мобильный пункт)", type: "Paper", coords: [43.2435, 76.8901], address: "Передвижной пункт, город Алматы", phone: "+7 707 680 73 10" },
+  { name: "ЭкоПромПереработка", type: "Paper", coords: [43.4098, 77.0193], address: "п. Отеген Батыр, ул. Калинина 17 А", phone: "8 (727) 973-51-82" },
+
+  // 🔋 BATTERY / ACCUMULATORS
+  { name: "Кайнар АКБ", type: "Battery", coords: [43.2484, 76.9178], address: "ул. Казыбаева 3", phone: "233-28-40" },
+  { name: "Аккумуляторный центр БАРС", type: "Battery", coords: [43.2498, 76.9105], address: "ул. Казыбаева 5 (ACBARS)", phone: "+7 701 963 28 32", link: "https://acbars.kz" },
+  { name: "Сынап плюс", type: "Battery", coords: [43.2796, 76.9881], address: "пр. Рыскулова 51", phone: "384-39-12" },
+  { name: "АлматыЭкологоСтрой", type: "Battery", coords: [43.2171, 76.8704], address: "9 мкр-н, д. 9", phone: "242-40-20" },
+  { name: "КСК Коктем-1", type: "Battery", coords: [43.2284, 76.9372], address: "мкр. Коктем-1, д. 45 (за магазином Ардагер)" },
+  { name: "ПКСК Елим Ай", type: "Battery", coords: [43.2396, 76.9311], address: "ул. Сатпаева 50 уг. Жарокова", phone: "245-95-35" },
+  { name: "КСК Надежда", type: "Battery", coords: [43.2278, 76.9197], address: "ул. Байкадамова 10 (между Розыбакиева и Жарокова)" },
+  { name: "КСК Орбита-1", type: "Battery", coords: [43.2123, 76.8578], address: "мкр. Орбита-1, д. 10 по Навои", phone: "265-60-69" },
+  { name: "ПКСК Алмагуль", type: "Battery", coords: [43.2264, 76.9533], address: "мкр. Алмагуль, 49", phone: "396-29-05" },
+  { name: "КСК Жалын (Медикер)", type: "Battery", coords: [43.2146, 76.8608], address: "Орбита-1, под аркой магазина «Медикер»" },
+
+  // 💻 ELECTRONIC WASTE / ECOBOXES
+  { name: "Satel Kazakhstan", type: "Electronics", coords: [43.2636, 76.9431], address: "ул. Жибек Жолы 106 уг. Абылай хана", link: "https://www.facebook.com/satel.kz/" },
+  { name: "Technodom Ecobox", type: "Electronics", coords: [43.2489, 76.9313], address: "ул. Валиханова 170" },
+  { name: "Armada Mall Ecobox", type: "Electronics", coords: [43.2366, 76.8704], address: "ул. Кабдолова 1" },
+  { name: "Mega Center Alma-Ata Ecobox", type: "Electronics", coords: [43.2227, 76.8872], address: "ул. Розыбакиева 247а" },
+  { name: "Mega Park Ecobox", type: "Electronics", coords: [43.2628, 76.9323], address: "ул. Макатаева 127" },
+  { name: "Ainabulak Ecobox", type: "Electronics", coords: [43.2701, 76.9255], address: "мкр. Айнабулак-3, 98" },
+  { name: "Promenad Center Ecobox", type: "Electronics", coords: [43.2492, 76.9423], address: "пр. Абая 44а" },
+  { name: "Prime Plaza Ecobox", type: "Electronics", coords: [43.2464, 76.8543], address: "ул. Саина уг. пр. Райымбека" },
+  { name: "Aport Mall Ecobox", type: "Electronics", coords: [43.2925, 76.8094], address: "пр. Райымбека Апорт Молл" },
+  { name: "Ramstore Ecobox", type: "Electronics", coords: [43.2359, 76.9491], address: "пр. Назарбаева 226" },
+  { name: "PromTechnoResource Белка", type: "Electronics", coords: [43.2512, 76.9154], address: "возле кафе Белка" },
+  { name: "PromTechnoResource Gymnasium 12", type: "Electronics", coords: [43.2622, 76.9359], address: "ул. Валиханова 79" },
+  { name: "PromTechnoResource School 13", type: "Electronics", coords: [43.2268, 76.8564], address: "11 мкр-н, 36" },
+  { name: "PromTechnoResource School 16", type: "Electronics", coords: [43.2548, 76.9475], address: "ул. Ади Шарипова 23" },
+  { name: "PromTechnoResource Lyceum 24", type: "Electronics", coords: [43.2562, 76.9329], address: "ул. Гоголя 187" },
+  { name: "PromTechnoResource Gymnasium 36", type: "Electronics", coords: [43.2533, 76.9492], address: "ул. Масанчи 70" },
+  { name: "PromTechnoResource School 40", type: "Electronics", coords: [43.2289, 76.8413], address: "мкр. Орбита-3, ул. Биржана 55а" }
+];
+
+    // Marker icons
+    const icons = {
+      Paper: L.icon({ iconUrl: 'images/paper.png', iconSize: [32, 32] }),
+      Battery: L.icon({ iconUrl: 'images/battery.png', iconSize: [32, 32] }),
+      Electronics: L.icon({ iconUrl: 'images/electric.png', iconSize: [32, 32] }),
+    };
+  
+    // Add markers
+    locations.forEach(loc => {
+      const icon = icons[loc.type] || L.icon({ iconUrl: 'images/icon-pin.png', iconSize: [32, 32] });
+      const popup = `
+        <b>${loc.name}</b><br>
+        ${loc.address}<br>
+        📞 ${loc.phone || '-'}<br>
+        ⏰ ${loc.hours || '—'}<br>
+        ${loc.link ? `<a href='${loc.link}' target='_blank'>More info</a>` : ''}
+      `;
+      L.marker(loc.coords, { icon }).addTo(map).bindPopup(popup);
+    });
+  </script>
+
+  
+
+
+   <!-- Team Section -->
+     <section id="section_team">
+       <div class="container">
+         <h2>Our Team</h2>
+         <div class="team-wrapper">
+           <div class="team-member">
+             <img src="images/team1.jpg" alt="Lazer Erkman">
+             <h5>Lazer Erkman</h5>
+             <p>Bot Development / Data Engineer</p>
+           </div>
+           <div class="team-member">
+             <img src="images/team2.jpg" alt="Diana Ruslanova">
+             <h5>Diana Ruslanova</h5>
+             <p>Product Manager / UI Designer</p>
+           </div>
+         </div>
+       </div>
+     </section>
+
+    <!-- CONTACT / FOOTER -->
+    <section id="section_contact">
+        <div class="container">
+        <div class="row align-items-start">
+            <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+            <h3>Contact</h3>
+            <p><strong>Email:</strong> <a href="mailto:l_yerkiman@kbtu.kz">l_yerkiman@kbtu.kz</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+77000000000">+7 700 000 00 00</a></p>
+            <p><strong>Address:</strong> Kazakhstan, Almaty, Tole Bi 59</p>
+
+            <div class="mt-4">
+                <a href="https://forms.gle/your-google-form" class="btn-contact">Leave a request</a>
+            </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12 text-lg-end text-center">
+            <p class="footer-copy">
+                © <span>EcoHelper Bot</span> — built with <a href="#">OpenStreetMap</a>, <a href="#">Python</a>, <a href="#">aiogram</a>
+            </p>
+            </div>
+        </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works">
-        <h2>How it works</h2>
-        <ol>
-            <li>Open the bot in Telegram</li>
-            <li>Select a waste category</li>
-            <li>Find the nearest recycling points on the map</li>
-            <li>Start sorting and join eco challenges</li>
-        </ol>
-        <img src="images/bot-illustration.png" alt="Telegram Bot Illustration" class="bot-image">
-    </section>
+  </main>
 
-    <!-- Team Section -->
-    <section id="team">
-        <h2>Our Team</h2>
-        <div class="team-grid">
-            <div class="team-member">
-                <img src="images/team1.jpg" alt="Lazer Erkıman">
-                <h3>Lazer Erkıman</h3>
-                <p>Bot Development / Data Engineer</p>
-            </div>
-            <div class="team-member">
-                <img src="images/team2.jpg" alt="Diana Ruslanova">
-                <h3>Diana Ruslanova</h3>
-                <p>Product Manager / UI/UX Designer</p>
-            </div>
-        </div>
-    </section>
+  <!-- OPTIONAL: YANDEX METRIKA & ADDTHIS placeholders (fill your IDs) -->
+  <!-- Yandex Metrika: replace XXXXXXX with your counter ID -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    // ym(XXXXXXX, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true });
+  </script>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:l_yerkiman@kbtu.kz">example@mail.com</a></p>
-        <p>Phone: <a href="tel:+77002200123">+7 700 000 00 00</a></p>
-        <p>Address: Kazakhstan, Almaty, Tole Bi 59</p>
-        <p>Leave a request: <a href="https://forms.gle/your-google-form">Google Forms</a></p>
-        <div class="social-share">
-            <!-- AddThis share buttons -->
-            <div class="addthis_inline_share_toolbox"></div>
-        </div>
-    </section>
+  <!-- AddThis placeholder -->
+  <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-xxxxxxxxxxxx"></script> -->
 
-    <script src="script.js"></script>
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-xxxxxxxxxxxx"></script>
+  <!-- Scripts (local copies included in project uploads) -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/click-scroll.js"></script>
+  <script src="js/custom.js"></script>
+
+  <script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+        <script>
+        // Navbar scroll behavior
+        window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+        } else {
+        navbar.classList.remove('scrolled');
+        }
+        });
+
+
+        // Smooth scroll animation
+        document.querySelectorAll('a.click-scroll').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+        window.scrollTo({
+        top: target.offsetTop - 70,
+        behavior: 'smooth'
+        });
+        }
+        });
+        });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const btnEn = document.getElementById('btn-en');
+              const btnRu = document.getElementById('btn-ru');
+            
+              function setLang(l) {
+                const isRu = (l === 'ru');
+                document.documentElement.lang = isRu ? 'ru' : 'en';
+            
+                document.querySelectorAll('.lang-en').forEach(el => {
+                  el.style.display = isRu ? 'none' : '';
+                });
+                document.querySelectorAll('.lang-ru').forEach(el => {
+                  el.style.display = isRu ? '' : 'none';
+                });
+            
+                // Update active button style
+                btnEn.classList.toggle('btn-light', !isRu);
+                btnRu.classList.toggle('btn-light', isRu);
+              }
+            
+              btnEn.addEventListener('click', function (e) {
+                e.preventDefault();
+                setLang('en');
+              });
+            
+              btnRu.addEventListener('click', function (e) {
+                e.preventDefault();
+                setLang('ru');
+              });
+            
+              // initial language: try browser, default EN
+              const browser = navigator.language || navigator.userLanguage || 'en';
+              setLang(browser.startsWith('ru') ? 'ru' : 'en');
+            });
+            </script>
+            
+
 </body>
 </html>
