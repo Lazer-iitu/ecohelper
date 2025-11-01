@@ -778,6 +778,68 @@
     }
     }
 
+    /* --- Map Section (eco green background) --- */
+#section_map {
+    position: relative;
+    background: linear-gradient(180deg, #14B789 0%, #12a57b 100%);
+    color: #ffffff;
+    padding: 120px 0;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  /* optional pattern overlay for depth */
+  #section_map::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    z-index: 0;
+  }
+  
+  #section_map .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  #section_map h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #ffffff;
+  }
+  
+  #section_map p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 40px;
+  }
+  
+  #section_map #map {
+    height: 600px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    z-index: 2;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 992px) {
+    #section_map {
+      padding: 80px 0;
+    }
+    #section_map h2 {
+      font-size: 36px;
+    }
+    #section_map p {
+      font-size: 16px;
+    }
+  }
+  
+
     /* --- Contact Section --- */
     #section_contact {
         background-color: #111;
